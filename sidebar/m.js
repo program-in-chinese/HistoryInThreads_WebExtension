@@ -55,18 +55,6 @@ $(function () {
       },
       persist: true
   });
-  /*if(!chrome)
-    console.log("NO CHROME@$#)U(%RIFJDPOFPUHF");
-  else
-    console.log("chrome there");
-  if(!chrome.history)
-    console.log("no chrome history");
-  else
-    console.log("history there");
-  if(!chrome.history.search)
-    console.log("no chrome history search");
-  else
-    console.log("history search there");*/
   var benchStart = 0;
   var treeRoot = $("#demo1").dynatree("getRoot");
   // Track the number of callbacks from chrome.history.getVisits()
@@ -79,7 +67,6 @@ $(function () {
   var history = new History();
   history.setView(treeRoot);
   clearView();
-  //console.log("tree root:"+treeRoot);
   history.getHistory("",history);//searchByKeywords("");
   
 });

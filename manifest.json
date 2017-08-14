@@ -13,16 +13,9 @@
   },
 
   "icons": {
-    "48": "icons/icon.png"
+    "64": "icons/icon.png"
   },
 
-  "permissions": ["history", "tabs"],
-
-  "content_scripts": [
-    {
-      "matches": ["*://*.mozilla.org/*"],
-      "js": ["borderify.js"]
-    }
-  ]
+  "permissions": ["history"]
 
 }
