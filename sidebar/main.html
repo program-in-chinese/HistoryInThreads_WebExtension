@@ -1,0 +1,103 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <script type="text/javascript" src="libs/jquery/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src='libs/jquery/jquery-ui.custom.min.js'></script>
+    <script type="text/javascript" src='libs/jquery/jquery.cookie.js'></script>
+    <script type="text/javascript" src="libs/jquery.dynatree/jquery.dynatree.min.js"></script>
+    
+
+    <link rel='stylesheet' type='text/css' href='libs/jquery.dynatree/skin/ui.dynatree.css'>
+    <link rel='stylesheet' type='text/css' href='libs/stylesheets/bootstrap.min.css'>
+    <style>
+      .box-shadow{
+    -webkit-box-shadow:  3px 3px 3px 3px #999;
+    box-shadow:  3px 3px 3px 3px #999;
+}
+
+.input-prepend, .input-prepend.input-fullwidth .input-wrapper { 
+  -webkit-border-radius: 3px;
+     -moz-border-radius: 3px;
+          border-radius: 3px;
+}
+
+.input-prepend.input-fullwidth {
+    position: relative;
+    display: block;
+}
+.input-prepend.input-fullwidth .btn {
+    width: 70px;
+}
+.input-prepend.input-fullwidth .input-wrapper {
+    position: absolute;
+    display: block;
+    left: 70px; /* 40 + 2*5 - 1 */
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+.input-prepend.input-fullwidth .input-wrapper input {
+    width: 100%;
+    height: 100%;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+
+     ul.dynatree-container span.td {
+        position: absolute;
+        display: inline;
+        border-size: 1px;
+        overflow: hidden;
+        background-color: white;
+     }
+     ul.dynatree-container span.td:nth-child(1) {
+        position: static;
+     }
+     ul.dynatree-container span.td:nth-child(2) {
+        right: 0px;
+        width: 300px;
+     }
+     span.dynatree-active a {
+      color: black
+        !important;
+     }
+     /*ul.dynatree-container span.td:nth-child(3) {
+        color: green;
+        left: 200px;
+        width: 150px;
+     }*/
+
+     span.dynatree-folder a
+    {
+      font-weight: normal;  /* custom */
+    }
+    /* with keywords behind folder so that the folders with keywords will highlight */ 
+     span.withkeywords a
+     {
+        font-weight: bold;
+        /*background-color: silver;*/
+        color: navy;
+     }
+      </style>
+    <!--<script type="text/javascript" src="main.js"></script>-->
+    <script type="text/javascript" src="history.js"></script>
+    <script type="text/javascript" src="m.js"></script>
+  </head>
+  <body>
+    <div id="search" class="input-prepend box-shadow input-fullwidth">
+      <input id="submitKeywords" type="submit" value="Search" class="btn primary"></input>
+      <div class="input-wrapper">
+        <input type="text" id="keywords" placeholder="Search by keyword..."/>
+      </div>
+    </div>
+    <div id="demo1" class="demo">
+      
+  </div>
+  </body>
+</html>
+
+
+
+
