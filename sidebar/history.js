@@ -19,7 +19,7 @@ Set.prototype.remove = function(o) {delete this[o];}
     var earliest = new Date();
     var visitIds = new Set();
     
-  var getEarliestVisits = function(that, url, visitItems){
+  var 取最早访问 = function(that, url, visitItems){
     //console.log("getEarliestVisits: "+numRequestsOutstanding);
     if(url.indexOf("fromwheretowhere_threads.html")==-1){
       for(var v in visitItems){
@@ -364,7 +364,7 @@ Set.prototype.remove = function(o) {delete this[o];}
           var url = historyItems[i].url;
           var processVisitsWithUrl = function(url) {
             return function(visitItems) {
-              getEarliestVisits(that, url, visitItems);
+              取最早访问(that, url, visitItems);
             };
           };
           chrome.history.getVisits({url: url}, processVisitsWithUrl(url));
