@@ -72,7 +72,10 @@ Set.prototype.remove = function(o) {delete this[o];}
       'maxResults':100
     };
     
-    //console.log(searchOptions);
+    that.历史搜索(that, searchOptions, visitIds);
+  };
+  
+  this.历史搜索 = function(that, searchOptions, visitIds) {
     chrome.history.search(searchOptions,
       function(historyItems) {
         // For each history item, get details on all visits.
@@ -97,9 +100,8 @@ Set.prototype.remove = function(o) {delete this[o];}
         }
       }
     );
-    
-  };
-  
+  }
+
   /* exceptions: ignore these visitItems */
   /* need to take all visit items into account, as they all can be root (title empty, typed, etc) */
   var processVisits = function(that, url, title, historyId, visitItems, visitIds) {
@@ -295,32 +297,8 @@ Set.prototype.remove = function(o) {delete this[o];}
       earliestStartTime = defaultStartTime;
       searchOptions.text = "";
       //console.log(searchOptions);
-      chrome.history.search(searchOptions,
-      function(historyItems) {
-        // For each history item, get details on all visits.
-        //console.log("history number:"+historyItems.length);
-        for (var i = 0; i < historyItems.length; ++i) {
-          var url = historyItems[i].url;
-          var title = historyItems[i].title;
-          var historyId = historyItems[i].id;
-          /*if(i==0){
-            console.log("that should be valid history object:");
-            console.log(that);
-          }*/
-          var processVisitsWithUrl = function(url, title, historyId) {
-            // We need the url of the visited item to process the visit.
-            // Use a closure to bind the  url into the callback's args.
-            return function(visitItems) {
-              processVisits(that, url, title, historyId, visitItems);
-            };
-          };
-          chrome.history.getVisits({url: url}, processVisitsWithUrl(url, title, historyId));
-          numRequestsOutstanding++;
-        }
-        if (!numRequestsOutstanding) {
-          that.onAllVisitsProcessed();
-        }
-      });
+      
+      this.历史搜索(that, searchOptions);
     }
     //search for the time of the earliest historyItems matching the keywords
     //then use the time to get all visitItems then structure threads
@@ -352,7 +330,6 @@ Set.prototype.remove = function(o) {delete this[o];}
       });
     }
   }
-  
 };
 
 History.prototype = {

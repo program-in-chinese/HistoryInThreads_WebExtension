@@ -5,5 +5,5 @@ QUnit.test( "hello test", function( assert ) {
 
 QUnit.test("History test1", function(assert) {
     var history = new History();
-    assert.ok(history.searchByEarliest != null);
+    assert.ok(history.按关键词搜索 != null);
 });
