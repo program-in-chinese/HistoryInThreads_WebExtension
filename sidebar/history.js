@@ -124,9 +124,6 @@ Set.prototype.remove = function(o) {delete this[o];}
   
   // This function is called when we have the final list of URls to display.
   this.onAllVisitsProcessed = function(visitIds) {
-    var vilen=0;
-    for(var i in visitIds)
-        vilen++;
       var walked = new Set();
       var LIMIT=100;//too deep to be real, can be loop
       //rebuild roots
@@ -207,22 +204,11 @@ Set.prototype.remove = function(o) {delete this[o];}
           lastUrl=root.href;
         }
         
-        //console.log("after filtering roots have: "+children.length);
-        if(!visitIds){
-          //console.log("visitIds null");
-          //return children;
-        }else{
+        if(visitIds != null){
           var filtered = children.filter(function(element){
             return hasKeywords(element, visitIds);
           });
-          
-          //console.log("visitIds not null, length: "+filtered.length);
-          if(filtered.length==0){
-            children=[];
-            children.push(createNoneNode("No matching results"));
-          }
-          else
-            children= filtered;
+          children = filtered.length==0 ? [createNoneNode("No matching results")] : filtered;
         }
     }
     this.树.addChild(children);
