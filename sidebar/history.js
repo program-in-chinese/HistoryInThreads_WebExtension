@@ -1,7 +1,6 @@
 var History = function(){
 
     var numRequestsOutstanding = 0;
-    var urlByVisitId = {};//visitId->url
     var referrByVisitId = {};//visitId -> referrerId
     var typeByVisitId={};
     var idByVisitId={};
@@ -29,7 +28,6 @@ var History = function(){
   };
   
   var initCachedMaps = function(){
-    urlByVisitId = {};//visitId->url
     referrByVisitId = {};//visitId -> referrerId
     typeByVisitId={};
     idByVisitId={};
@@ -106,11 +104,11 @@ var History = function(){
         referrByVisitId[visitId]=visitItems[v].referringVisitId;
         idByVisitId[visitId]=visitItems[v].id;
         historyByVisitId[visitId]=historyId;
-        urlByVisitId[visitId]=url;
         typeByVisitId[visitId]=visitItems[v].transition;
         timeByVisitId[visitId]=visitItems[v].visitTime;
 
         缓冲表.置网页抬头(visitId, title);
+        缓冲表.置URL(visitId, url);
     }
     if (!--numRequestsOutstanding) {
       that.onAllVisitsProcessed(visitIds);
@@ -127,7 +125,7 @@ var History = function(){
       if(this.rootsRebuild){
         this.roots=[];
         this.links={};
-        for(var visitId in urlByVisitId){
+        for(var visitId in 缓冲表.访问ID到URL){
           //loop to get top root
           var i = 0;
           var currentVisitId=visitId;
@@ -140,8 +138,8 @@ var History = function(){
               break;
             }
             
-            //visitId can be wrong: no url/title, maybe a redirect? so if it's not urlByVisitId, it's invalid, and be discarded for now
-            if(!(referrByVisitId[currentVisitId] in urlByVisitId))
+            //visitId can be wrong: no url/title, maybe a redirect? so if it's not 缓冲表.访问ID到URL, it's invalid, and be discarded for now
+            if(!(referrByVisitId[currentVisitId] in 缓冲表.访问ID到URL))
               break;
             
             if(this.links[referrByVisitId[currentVisitId]]==null)
@@ -152,7 +150,7 @@ var History = function(){
             
           }
           
-          if(!(currentVisitId in walked) && (currentVisitId in urlByVisitId)){
+          if(!(currentVisitId in walked) && (currentVisitId in 缓冲表.访问ID到URL)){
             var historyId = historyByVisitId[currentVisitId];
             
             walked.add(currentVisitId);
@@ -213,7 +211,12 @@ var History = function(){
   }
   
   function generateTree(visitId, links, visitIds){
-    var node={visitId: visitId, title:缓冲表.取网页抬头(visitId),lastVisitTime:new Date(timeByVisitId[visitId]),href:urlByVisitId[visitId]};
+    var node={
+      visitId: visitId,
+      title:缓冲表.取网页抬头(visitId),
+      lastVisitTime:new Date(timeByVisitId[visitId]),
+      href:缓冲表.取URL(visitId)
+    };
     if(visitIds && (visitId in visitIds))
       node.addClass='withkeywords';
     /*console.log(visitId+" -> "+links[visitId]);*/
