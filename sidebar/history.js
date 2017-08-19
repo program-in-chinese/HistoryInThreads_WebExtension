@@ -1,13 +1,13 @@
 var History = function(){
 
     var numRequestsOutstanding = 0;
-  var titleByVisitId = {}; //visitId->title
     var urlByVisitId = {};//visitId->url
     var referrByVisitId = {};//visitId -> referrerId
     var typeByVisitId={};
     var idByVisitId={};
     var historyByVisitId={};
     var timeByVisitId={};
+    var 缓冲表;
     
     var earliestStartTime = new Date();
     var earliest = new Date();
@@ -29,13 +29,14 @@ var History = function(){
   };
   
   var initCachedMaps = function(){
-    titleByVisitId = {}; //visitId->title
     urlByVisitId = {};//visitId->url
     referrByVisitId = {};//visitId -> referrerId
     typeByVisitId={};
     idByVisitId={};
     historyByVisitId={};
     timeByVisitId={};
+
+    缓冲表 = new 访问缓冲表();
   };
   
   var searchByEarliest = function(earliest, visitIds, that){
@@ -106,9 +107,10 @@ var History = function(){
         idByVisitId[visitId]=visitItems[v].id;
         historyByVisitId[visitId]=historyId;
         urlByVisitId[visitId]=url;
-        titleByVisitId[visitId]=title;
         typeByVisitId[visitId]=visitItems[v].transition;
         timeByVisitId[visitId]=visitItems[v].visitTime;
+
+        缓冲表.置网页抬头(visitId, title);
     }
     if (!--numRequestsOutstanding) {
       that.onAllVisitsProcessed(visitIds);
@@ -211,7 +213,7 @@ var History = function(){
   }
   
   function generateTree(visitId, links, visitIds){
-    var node={visitId: visitId, title:titleByVisitId[visitId],lastVisitTime:new Date(timeByVisitId[visitId]),href:urlByVisitId[visitId]};
+    var node={visitId: visitId, title:缓冲表.取网页抬头(visitId),lastVisitTime:new Date(timeByVisitId[visitId]),href:urlByVisitId[visitId]};
     if(visitIds && (visitId in visitIds))
       node.addClass='withkeywords';
     /*console.log(visitId+" -> "+links[visitId]);*/
