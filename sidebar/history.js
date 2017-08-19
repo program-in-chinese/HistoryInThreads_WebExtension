@@ -5,7 +5,6 @@ var History = function(){
 Set.prototype.add = function(o) {this[o] = true;}
 Set.prototype.remove = function(o) {delete this[o];}
 
-  var benchStart = 0;
     var numRequestsOutstanding = 0;
   var titleByVisitId = {}; //visitId->title
     var urlByVisitId = {};//visitId->url
@@ -20,9 +19,7 @@ Set.prototype.remove = function(o) {delete this[o];}
     var 访问Ids = new Set();
     
   var 取最早访问 = function(that, url, visitItems){
-    //console.log("getEarliestVisits: "+numRequestsOutstanding);
-    if(url.indexOf("fromwheretowhere_threads.html")==-1){
-      for(var v in visitItems){
+    for(var v in visitItems){
         var visitId = visitItems[v].visitId;
         
         if(visitItems[v].visitTime<earliest){
@@ -30,14 +27,10 @@ Set.prototype.remove = function(o) {delete this[o];}
           earliest=visitItems[v].visitTime;
         }
         访问Ids.add(visitId);
-        //console.log("need visitid:"+visitId+" <- "+visitItems[v].referringVisitId+" url:"+url);
-      }
     }
     if (!--numRequestsOutstanding) {
-      //console.log("got earliest: "+((new Date())-benchStart)+" ms");
       searchByEarliest(earliest, 访问Ids, that);
     }
-    //console.log("end earliest: "+numRequestsOutstanding);
   };
   
   var initCachedMaps = function(){
@@ -104,8 +97,7 @@ Set.prototype.remove = function(o) {delete this[o];}
   /* need to take all visit items into account, as they all can be root (title empty, typed, etc) */
   var processVisits = function(that, url, title, historyId, visitItems, visitIds) {
     //filter self by url
-    if(url.indexOf("fromwheretowhere_threads.html")==-1){
-      for(var v in visitItems){
+    for(var v in visitItems){
         var visitId = visitItems[v].visitId;
         
         //ignore all 'reload' type
@@ -122,8 +114,6 @@ Set.prototype.remove = function(o) {delete this[o];}
         titleByVisitId[visitId]=title;
         typeByVisitId[visitId]=visitItems[v].transition;
         timeByVisitId[visitId]=visitItems[v].visitTime;
-        //console.log("visitid:"+visitId+" <- "+visitItems[v].referringVisitId+" title:"+title+" url:"+url);
-      }
     }
     if (!--numRequestsOutstanding) {
       that.onAllVisitsProcessed(visitIds);
@@ -263,7 +253,6 @@ Set.prototype.remove = function(o) {delete this[o];}
   
   /* search by keywords, only show the referrers; when keywords is empty, show a week's history */
   this.按关键词搜索历史 = function(keywords, that){
-    benchStart = new Date();
     numRequestsOutstanding = 0;
     
     //console.log("in 按关键词搜索历史: "+numRequestsOutstanding);
@@ -306,7 +295,6 @@ Set.prototype.remove = function(o) {delete this[o];}
         }
         /* this only happens when there's no matching history items */
         if (!numRequestsOutstanding) {
-          //console.log("no search results: "+((new Date())-benchStart)+" ms");
           that.onAllVisitsProcessed(访问Ids);
         }
       });
