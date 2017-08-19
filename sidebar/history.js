@@ -1,7 +1,6 @@
 var History = function(){
 
     var numRequestsOutstanding = 0;
-    var typeByVisitId={};
     var idByVisitId={};
     var historyByVisitId={};
     var timeByVisitId={};
@@ -27,7 +26,6 @@ var History = function(){
   };
   
   var initCachedMaps = function(){
-    typeByVisitId={};
     idByVisitId={};
     historyByVisitId={};
     timeByVisitId={};
@@ -99,7 +97,6 @@ var History = function(){
         
         idByVisitId[visitId]=visitItems[v].id;
         historyByVisitId[visitId]=historyId;
-        typeByVisitId[visitId]=visitItems[v].transition;
         timeByVisitId[visitId]=visitItems[v].visitTime;
 
         缓冲表.置网页抬头(visitId, title);
