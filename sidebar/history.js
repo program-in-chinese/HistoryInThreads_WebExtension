@@ -17,7 +17,7 @@ Set.prototype.remove = function(o) {delete this[o];}
     
     var earliestStartTime = new Date();
     var earliest = new Date();
-    var visitIds = new Set();
+    var 访问Ids = new Set();
     
   var 取最早访问 = function(that, url, visitItems){
     //console.log("getEarliestVisits: "+numRequestsOutstanding);
@@ -29,13 +29,13 @@ Set.prototype.remove = function(o) {delete this[o];}
           //console.log(visitItems[v].visitTime+" earlier than: "+earliest);
           earliest=visitItems[v].visitTime;
         }
-        visitIds.add(visitId);
+        访问Ids.add(visitId);
         //console.log("need visitid:"+visitId+" <- "+visitItems[v].referringVisitId+" url:"+url);
       }
     }
     if (!--numRequestsOutstanding) {
       //console.log("got earliest: "+((new Date())-benchStart)+" ms");
-      searchByEarliest(earliest, visitIds, that);
+      searchByEarliest(earliest, 访问Ids, that);
     }
     //console.log("end earliest: "+numRequestsOutstanding);
   };
@@ -255,16 +255,6 @@ Set.prototype.remove = function(o) {delete this[o];}
     return children;
   }
   
-  function createNoneNode(title){
-    return {title:title};
-  }
-  
-  function notEmptyArray(array){
-    if (array && array.length > 0)
-      return true;
-    return false;
-  }
-
   function generateTree(visitId, links, visitIds){
         //console.log("generate tree for visitId:"+visitId);
     var node={visitId: visitId, title:titleByVisitId[visitId],lastVisitTime:new Date(timeByVisitId[visitId]),href:urlByVisitId[visitId]};
@@ -337,7 +327,7 @@ Set.prototype.remove = function(o) {delete this[o];}
     else{
       //init the retrieve date when there's keywords
       earliest = new Date();
-      visitIds = new Set();
+      访问Ids = new Set();
       
       //console.log("go earliest");
       //console.log(searchOptions);
@@ -357,7 +347,7 @@ Set.prototype.remove = function(o) {delete this[o];}
         /* this only happens when there's no matching history items */
         if (!numRequestsOutstanding) {
           //console.log("no search results: "+((new Date())-benchStart)+" ms");
-          that.onAllVisitsProcessed(visitIds);
+          that.onAllVisitsProcessed(访问Ids);
         }
       });
     }
