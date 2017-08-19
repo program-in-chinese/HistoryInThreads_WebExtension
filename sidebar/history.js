@@ -250,7 +250,7 @@ Set.prototype.remove = function(o) {delete this[o];}
     /*console.log("finished populating: "+((new Date())-benchStart)+" ms");
     if(children.length>0)
         console.log("first leaf:"+children[0].title);*/
-    this.treeRoot.addChild(children);
+    this.树.addChild(children);
     //console.log("finished populating: "+((new Date())-benchStart)+" ms");
     return children;
   }
@@ -274,14 +274,14 @@ Set.prototype.remove = function(o) {delete this[o];}
   var defaultStartTime = (new Date).getTime() - microsecondsPerDay;
   
   /* search by keywords, only show the referrers; when keywords is empty, show a week's history */
-  this.searchByKeywords = function(keywords, that){
+  this.按关键词搜索历史 = function(keywords, that){
     //console.log("in search by keywords: "+keywords);
     benchStart = new Date();
     numRequestsOutstanding = 0;
     //console.log("remove all");
     //init ends
     
-    //console.log("in searchByKeywords: "+numRequestsOutstanding);
+    //console.log("in 按关键词搜索历史: "+numRequestsOutstanding);
     var searchOptions = {
       'text': keywords,              // Return every history item....
       'startTime': 0,
@@ -360,14 +360,14 @@ History.prototype = {
   //save the roots if history isn't retrieved
   roots:[],
   links:{},
-  treeRoot:null,
+  树:null,
   rootsRebuild:true,//flag: when the earliest date of the matched visitItems are later than earliestStartTime, set this to false, meaning no need to rebuild roots
   
-  setView: function(root){
-    this.treeRoot = root;
+  置视图: function(树){
+    this.树 = 树;
   },
-	getHistory: function(keywords){
-    this.searchByKeywords(keywords, this);
+	按关键词搜索: function(关键词){
+    this.按关键词搜索历史(关键词, this);
 	},
   
 }

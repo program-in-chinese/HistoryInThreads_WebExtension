@@ -1,9 +1,9 @@
 $(function () {
   $("#submitKeywords").on('click', function(){
-    var keywords = $("#keywords").val();
+    var 关键词 = $("#keywords").val();
     //console.log(keywords);
     clearView();
-    history.searchByKeywords(keywords,history);
+    history.按关键词搜索(关键词);
   });
   $("#keywords").keypress(function (e) {
         if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
@@ -56,17 +56,17 @@ $(function () {
       persist: true
   });
   var benchStart = 0;
-  var treeRoot = $("#demo1").dynatree("getRoot");
+  var 树 = $("#demo1").dynatree("getRoot");
   // Track the number of callbacks from chrome.history.getVisits()
   // that we expect to get.  When it reaches zero, we have all results.
   var numRequestsOutstanding = 0;
   
   var clearView = function(){
-    treeRoot.removeChildren();
+    树.removeChildren();
   }
   var history = new History();
-  history.setView(treeRoot);
+  history.置视图(树);
   clearView();
-  history.getHistory("",history);//searchByKeywords("");
+  history.按关键词搜索("");
   
 });
