@@ -1,18 +1,19 @@
 var History = function(){
 
-    var numRequestsOutstanding = 0;
-    var 缓冲表;
-    
-    var earliestStartTime = new Date();
-    var earliest = new Date();
-    var 访问Ids = new Set();
-    
+  var numRequestsOutstanding = 0;
+  var 缓冲表;  
+  var 最早回溯时间点 = new Date();
+  var earliest = new Date();
+  var 访问Ids = new Set();
+
+  var 一天内毫秒数 = 1000 * 60 * 60 * 24 * 7;
+  var 默认回溯时间点 = (new Date).getTime() - 一天内毫秒数;
+
   var 取最早访问 = function(that, url, visitItems){
     for(var v in visitItems){
         var visitId = visitItems[v].visitId;
         
         if(visitItems[v].visitTime<earliest){
-          //console.log(visitItems[v].visitTime+" earlier than: "+earliest);
           earliest=visitItems[v].visitTime;
         }
         访问Ids.add(visitId);
@@ -22,25 +23,23 @@ var History = function(){
     }
   };
   
-  var initCachedMaps = function(){
+  var 初始化缓冲表 = function(){
     缓冲表 = new 访问缓冲表();
   };
   
   var searchByEarliest = function(earliest, visitIds, that){
-    var currentStartTime = earliest-microsecondsPerDay;
+    var currentStartTime = earliest - 一天内毫秒数;
     //if earliest history retrieving time is earlier than this earliest, no need to retrieve history again
-    if(earliestStartTime<currentStartTime){
-      //console.log("earliest: "+(new Date(earliestStartTime))+" no need to retrieve");
+    if(最早回溯时间点 < currentStartTime){
       that.rootsRebuild=false;
       that.onAllVisitsProcessed(visitIds);
       return;
     }
     that.rootsRebuild=true;
-    earliestStartTime = currentStartTime;
-    //init the maps
-    initCachedMaps();
+    最早回溯时间点 = currentStartTime;
+    初始化缓冲表();
     var searchOptions = {
-      'text': '',              // Return every history item....
+      'text': '',              // 返回所有历史! TODO: 默认改为当天, 防止耗时太久
       'startTime': currentStartTime,
       'maxResults':100
     };
@@ -213,9 +212,6 @@ var History = function(){
     return node;
   }
   
-  var microsecondsPerDay = 1000 * 60 * 60 * 24 * 7;
-  var defaultStartTime = (new Date).getTime() - microsecondsPerDay;
-  
   /* search by keywords, only show the referrers; when keywords is empty, show a week's history */
   this.按关键词搜索历史 = function(keywords, that){
     numRequestsOutstanding = 0;
@@ -226,12 +222,13 @@ var History = function(){
       'startTime': 0,
       'maxResults':100
     };
+    // TODO: bug-第一次打开时,默认应该只显示当天历史
     if(keywords==''){
       //init the maps only when there's no keywords
-      initCachedMaps();
+      初始化缓冲表();
       
-      searchOptions.startTime = defaultStartTime;
-      earliestStartTime = defaultStartTime;
+      searchOptions.startTime = 默认回溯时间点;
+      最早回溯时间点 = 默认回溯时间点;
       searchOptions.text = "";
       
       this.历史搜索(that, searchOptions);
@@ -273,7 +270,7 @@ History.prototype = {
   roots:[],
   links:{},
   树:null,
-  rootsRebuild:true,//flag: when the earliest date of the matched visitItems are later than earliestStartTime, set this to false, meaning no need to rebuild roots
+  rootsRebuild:true,//flag: when the earliest date of the matched visitItems are later than 最早回溯时间点, set this to false, meaning no need to rebuild roots
   
   置视图: function(树){
     this.树 = 树;
