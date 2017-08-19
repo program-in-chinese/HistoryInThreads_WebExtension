@@ -1,9 +1,4 @@
 var History = function(){
-    
-
-  var Set = function() {}
-Set.prototype.add = function(o) {this[o] = true;}
-Set.prototype.remove = function(o) {delete this[o];}
 
     var numRequestsOutstanding = 0;
   var titleByVisitId = {}; //visitId->title
