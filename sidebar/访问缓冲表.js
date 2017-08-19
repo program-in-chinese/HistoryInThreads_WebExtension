@@ -3,6 +3,7 @@ var 访问缓冲表 = function() {
   this.访问ID到URL = {}; //visitId->url
   this.访问ID到来源ID = {}; //visitId -> referrerId
   this.访问ID到访问时间 = {};
+  this.访问ID到历史 = {};
 }
 访问缓冲表.prototype.置网页抬头 = function(访问ID, 网页抬头) {
   this.访问ID到网页抬头[访问ID] = 网页抬头;
@@ -27,6 +28,12 @@ var 访问缓冲表 = function() {
 }
 访问缓冲表.prototype.取访问时间 = function(访问ID) {
   return this.访问ID到访问时间[访问ID];
+}
+访问缓冲表.prototype.置历史 = function(访问ID, 历史) {
+  this.访问ID到历史[访问ID] = 历史;
+}
+访问缓冲表.prototype.取历史 = function(访问ID) {
+  return this.访问ID到历史[访问ID];
 }
 访问缓冲表.prototype.访问ID到URL = function() {
   return this.访问ID到URL;

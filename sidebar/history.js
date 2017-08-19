@@ -1,7 +1,6 @@
 var History = function(){
 
     var numRequestsOutstanding = 0;
-    var historyByVisitId={};
     var 缓冲表;
     
     var earliestStartTime = new Date();
@@ -24,8 +23,6 @@ var History = function(){
   };
   
   var initCachedMaps = function(){
-    historyByVisitId={};
-
     缓冲表 = new 访问缓冲表();
   };
   
@@ -90,13 +87,12 @@ var History = function(){
         /*if(visitItems[v].transition=="reload"){
           continue;
         }*/
-        
-        historyByVisitId[visitId]=historyId;
 
         缓冲表.置网页抬头(visitId, title);
         缓冲表.置URL(visitId, url);
         缓冲表.置来源ID(visitId, visitItems[v].referringVisitId);
         缓冲表.置访问时间(visitId, visitItems[v].visitTime);
+        缓冲表.置历史(visitId, historyId);
     }
     if (!--numRequestsOutstanding) {
       that.onAllVisitsProcessed(visitIds);
@@ -139,7 +135,7 @@ var History = function(){
           }
           
           if(!(currentVisitId in walked) && (currentVisitId in 缓冲表.访问ID到URL)){
-            var historyId = historyByVisitId[currentVisitId];
+            var historyId = 缓冲表.取历史(currentVisitId);
             
             walked.add(currentVisitId);
             this.roots.push(currentVisitId);
