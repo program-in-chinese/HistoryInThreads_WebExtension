@@ -1,7 +1,6 @@
 var History = function(){
 
     var numRequestsOutstanding = 0;
-    var referrByVisitId = {};//visitId -> referrerId
     var typeByVisitId={};
     var idByVisitId={};
     var historyByVisitId={};
@@ -28,7 +27,6 @@ var History = function(){
   };
   
   var initCachedMaps = function(){
-    referrByVisitId = {};//visitId -> referrerId
     typeByVisitId={};
     idByVisitId={};
     historyByVisitId={};
@@ -99,9 +97,6 @@ var History = function(){
           continue;
         }*/
         
-        /*if(referrByVisitId[visitId]!=null)
-          console.log(visitId+": "+referrByVisitId[visitId]);*/
-        referrByVisitId[visitId]=visitItems[v].referringVisitId;
         idByVisitId[visitId]=visitItems[v].id;
         historyByVisitId[visitId]=historyId;
         typeByVisitId[visitId]=visitItems[v].transition;
@@ -109,6 +104,7 @@ var History = function(){
 
         缓冲表.置网页抬头(visitId, title);
         缓冲表.置URL(visitId, url);
+        缓冲表.置来源ID(visitId, visitItems[v].referringVisitId);
     }
     if (!--numRequestsOutstanding) {
       that.onAllVisitsProcessed(visitIds);
@@ -129,8 +125,8 @@ var History = function(){
           //loop to get top root
           var i = 0;
           var currentVisitId=visitId;
-          
-          while(referrByVisitId[currentVisitId]!=null&&referrByVisitId[currentVisitId]!=0&&i<LIMIT){
+          var referr = 缓冲表.取来源ID(currentVisitId);
+          while(referr!=null&&referr!=0&&i<LIMIT){
             
             i++;
             // if current id has been visited, no need to trace back, as it has been done already
@@ -139,14 +135,14 @@ var History = function(){
             }
             
             //visitId can be wrong: no url/title, maybe a redirect? so if it's not 缓冲表.访问ID到URL, it's invalid, and be discarded for now
-            if(!(referrByVisitId[currentVisitId] in 缓冲表.访问ID到URL))
+            if(!(referr in 缓冲表.访问ID到URL))
               break;
             
-            if(this.links[referrByVisitId[currentVisitId]]==null)
-              this.links[referrByVisitId[currentVisitId]]=[];
-            this.links[referrByVisitId[currentVisitId]].push(currentVisitId);
+            if(this.links[referr]==null)
+              this.links[referr]=[];
+            this.links[referr].push(currentVisitId);
             walked.add(currentVisitId);
-            currentVisitId=referrByVisitId[currentVisitId];
+            currentVisitId=referr;
             
           }
           
