@@ -127,10 +127,10 @@ Set.prototype.remove = function(o) {delete this[o];}
     var vilen=0;
     for(var i in visitIds)
         vilen++;
-    var walked = new Set();
-    var LIMIT=100;//too deep to be real, can be loop
-    //rebuild roots
-    if(this.rootsRebuild){
+      var walked = new Set();
+      var LIMIT=100;//too deep to be real, can be loop
+      //rebuild roots
+      if(this.rootsRebuild){
         this.roots=[];
         this.links={};
         for(var visitId in urlByVisitId){
@@ -176,12 +176,10 @@ Set.prototype.remove = function(o) {delete this[o];}
         return createNoneNode("No history record");
       
     }
-    //console.log("root number:"+this.roots.length);
     var linkslen =0;
     for(var l in this.links){
         linkslen++;
     }
-    //console.log("links length:"+linkslen);
     var lastRoot = generateTree(this.roots[0], this.links, visitIds);
     lastUrl=lastRoot.href;
     if(this.roots.length==1){
@@ -204,10 +202,7 @@ Set.prototype.remove = function(o) {delete this[o];}
             }
             count=1;
           }
-          /*if(!visitIds || hasKeywords(lastRoot, hasVisit))*/
-            children.push(lastRoot);
-          /*else if(visitIds)
-            console.log("no keywords: "+lastRoot.visitId);*/
+          children.push(lastRoot);
           lastRoot = root;
           lastUrl=root.href;
         }
