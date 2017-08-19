@@ -60,18 +60,16 @@ Set.prototype.remove = function(o) {delete this[o];}
       return;
     }
     that.rootsRebuild=true;
-    //console.log("searchByEarliest: "+(new Date(currentStartTime)));
     earliestStartTime = currentStartTime;
-    //console.log("in searchByEarliest");
     //init the maps
     initCachedMaps();
-    //console.log(new Date(earliest));
     var searchOptions = {
       'text': '',              // Return every history item....
       'startTime': currentStartTime,
       'maxResults':100
     };
     
+    // 必须是that.  TODO: 改掉它
     that.历史搜索(that, searchOptions, visitIds);
   };
   
@@ -136,17 +134,13 @@ Set.prototype.remove = function(o) {delete this[o];}
   
   // This function is called when we have the final list of URls to display.
   this.onAllVisitsProcessed = function(visitIds) {
-    //console.log("visitIds null or not: "+visitIds);
     var vilen=0;
     for(var i in visitIds)
         vilen++;
-    //console.log("visitIds length:"+vilen);
     var walked = new Set();
-    //var links = this.links;
     var LIMIT=100;//too deep to be real, can be loop
     //rebuild roots
     if(this.rootsRebuild){
-        //console.log("rebuild roots");
         this.roots=[];
         this.links={};
         for(var visitId in urlByVisitId){
@@ -201,10 +195,7 @@ Set.prototype.remove = function(o) {delete this[o];}
     var lastRoot = generateTree(this.roots[0], this.links, visitIds);
     lastUrl=lastRoot.href;
     if(this.roots.length==1){
-        //console.log("got 1");
       children.push(lastRoot);
-      //children.push(root);
-      //return children;
     }else{
         //in reverse order, to make latest on top
         for(var r=this.roots.length-1;r>=0;r--){
@@ -249,16 +240,11 @@ Set.prototype.remove = function(o) {delete this[o];}
             children= filtered;
         }
     }
-    /*console.log("finished populating: "+((new Date())-benchStart)+" ms");
-    if(children.length>0)
-        console.log("first leaf:"+children[0].title);*/
     this.树.addChild(children);
-    //console.log("finished populating: "+((new Date())-benchStart)+" ms");
     return children;
   }
   
   function generateTree(visitId, links, visitIds){
-        //console.log("generate tree for visitId:"+visitId);
     var node={visitId: visitId, title:titleByVisitId[visitId],lastVisitTime:new Date(timeByVisitId[visitId]),href:urlByVisitId[visitId]};
     if(visitIds && (visitId in visitIds))
       node.addClass='withkeywords';
@@ -277,11 +263,8 @@ Set.prototype.remove = function(o) {delete this[o];}
   
   /* search by keywords, only show the referrers; when keywords is empty, show a week's history */
   this.按关键词搜索历史 = function(keywords, that){
-    //console.log("in search by keywords: "+keywords);
     benchStart = new Date();
     numRequestsOutstanding = 0;
-    //console.log("remove all");
-    //init ends
     
     //console.log("in 按关键词搜索历史: "+numRequestsOutstanding);
     var searchOptions = {
@@ -296,7 +279,6 @@ Set.prototype.remove = function(o) {delete this[o];}
       searchOptions.startTime = defaultStartTime;
       earliestStartTime = defaultStartTime;
       searchOptions.text = "";
-      //console.log(searchOptions);
       
       this.历史搜索(that, searchOptions);
     }
