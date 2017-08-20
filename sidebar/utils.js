@@ -24,3 +24,13 @@
       return true;
     return false;
   }
+
+  // 返回毫秒
+  function 取今日开始时间点() {
+    var now=new Date();
+    var hour = now.getHours();
+    var milli = now.getMilliseconds();
+    var min = now.getMinutes();
+    var sec = now.getSeconds();
+    return now-((60*hour+min)*60+sec)*1000+milli;
+  }

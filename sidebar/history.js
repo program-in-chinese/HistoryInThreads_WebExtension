@@ -1,13 +1,19 @@
 var History = function(){
 
+  // TODO: 当本次回溯时间比上次近, 而且关键词相同时, 不用再次搜索浏览历史. 只需在缓冲表中重新搜索创建树即可.
+
   var numRequestsOutstanding = 0;
   var 缓冲表;  
   var 最早回溯时间点 = new Date();
   var earliest = new Date();
   var 访问Ids = new Set();
 
-  var 一天内毫秒数 = 1000 * 60 * 60 * 24 * 7;
-  var 默认回溯时间点 = (new Date).getTime() - 一天内毫秒数;
+  var 一天内毫秒数 = 1000 * 60 * 60 * 24;
+  var 默认回溯时间点 = 取今日开始时间点();
+
+  // 第一次打开时,默认只显示一天内历史
+  // TODO: 添加界面, 允许选择回溯时间点
+  var 回溯时间点 = 默认回溯时间点;
 
   var 取最早访问 = function(that, url, visitItems){
     for(var v in visitItems){
@@ -80,6 +86,11 @@ var History = function(){
   var processVisits = function(that, url, title, historyId, visitItems, visitIds) {
     //filter self by url
     for(var v in visitItems){
+      var 访问时间 = visitItems[v].visitTime;
+      if (回溯时间点 > 访问时间) {
+        continue;
+      }
+
         var visitId = visitItems[v].visitId;
         
         //ignore all 'reload' type
@@ -90,7 +101,7 @@ var History = function(){
         缓冲表.置网页抬头(visitId, title);
         缓冲表.置URL(visitId, url);
         缓冲表.置来源ID(visitId, visitItems[v].referringVisitId);
-        缓冲表.置访问时间(visitId, visitItems[v].visitTime);
+        缓冲表.置访问时间(visitId, 访问时间);
         缓冲表.置历史(visitId, historyId);
     }
     if (!--numRequestsOutstanding) {
@@ -222,14 +233,12 @@ var History = function(){
       'startTime': 0,
       'maxResults':100
     };
-    // TODO: bug-第一次打开时,默认应该只显示当天历史
     if(keywords==''){
       //init the maps only when there's no keywords
       初始化缓冲表();
       
       searchOptions.startTime = 默认回溯时间点;
       最早回溯时间点 = 默认回溯时间点;
-      searchOptions.text = "";
       
       this.历史搜索(that, searchOptions);
     }
@@ -240,11 +249,8 @@ var History = function(){
       earliest = new Date();
       访问Ids = new Set();
       
-      //console.log("go earliest");
-      //console.log(searchOptions);
       chrome.history.search(searchOptions,
       function(historyItems) {
-        //console.log("history items: "+historyItems.length);
         for (var i = 0; i < historyItems.length; ++i) {
           var url = historyItems[i].url;
           var processVisitsWithUrl = function(url) {
