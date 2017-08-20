@@ -37,11 +37,11 @@ var History = function(){
     var currentStartTime = earliest - 一天内毫秒数;
     //if earliest history retrieving time is earlier than this earliest, no need to retrieve history again
     if(最早回溯时间点 < currentStartTime){
-      that.rootsRebuild=false;
+      that.需重建树=false;
       that.onAllVisitsProcessed(visitIds);
       return;
     }
-    that.rootsRebuild=true;
+    that.需重建树=true;
     最早回溯时间点 = currentStartTime;
     初始化缓冲表();
     var searchOptions = {
@@ -91,18 +91,13 @@ var History = function(){
         continue;
       }
 
-        var visitId = visitItems[v].visitId;
+      var visitId = visitItems[v].visitId;
         
-        //ignore all 'reload' type
-        /*if(visitItems[v].transition=="reload"){
-          continue;
-        }*/
-
-        缓冲表.置网页抬头(visitId, title);
-        缓冲表.置URL(visitId, url);
-        缓冲表.置来源ID(visitId, visitItems[v].referringVisitId);
-        缓冲表.置访问时间(visitId, 访问时间);
-        缓冲表.置历史(visitId, historyId);
+      缓冲表.置网页抬头(visitId, title);
+      缓冲表.置URL(visitId, url);
+      缓冲表.置来源ID(visitId, visitItems[v].referringVisitId);
+      缓冲表.置访问时间(visitId, 访问时间);
+      缓冲表.置历史(visitId, historyId);
     }
     if (!--numRequestsOutstanding) {
       that.onAllVisitsProcessed(visitIds);
@@ -116,7 +111,7 @@ var History = function(){
       var walked = new Set();
       var LIMIT=100;//too deep to be real, can be loop
       //rebuild roots
-      if(this.rootsRebuild){
+      if(this.需重建树){
         this.roots=[];
         this.links={};
         for(var visitId in 缓冲表.访问ID到URL){
@@ -132,7 +127,7 @@ var History = function(){
               break;
             }
             
-            //visitId can be wrong: no url/title, maybe a redirect? so if it's not 缓冲表.访问ID到URL, it's invalid, and be discarded for now
+            // 如果referr不在缓冲表内, it's invalid, and be discarded for now
             if(!(referr in 缓冲表.访问ID到URL))
               break;
             
@@ -155,28 +150,17 @@ var History = function(){
     }
     
     var children = [];
-    //var lastUrl = "";
-    /* show 'no match' */
-    if(this.roots.length==0){
-        return createNoneNode("No history record");
-      
+    //in reverse order, to make latest on top
+    for(var r=this.roots.length-1;r>=0;r--){
+      children.push(generateTree(this.roots[r], this.links, visitIds));
     }
-        //in reverse order, to make latest on top
-        for(var r=this.roots.length-1;r>=0;r--){
-          var root = generateTree(this.roots[r], this.links, visitIds);
-          if(root.href==null){
-            //ignore those with null url
-            continue;
-          }
-          children.push(root);
-        }
-        
-        if(visitIds != null){
-          var filtered = children.filter(function(element){
-            return hasKeywords(element, visitIds);
-          });
-          children = filtered.length==0 ? [createNoneNode("No matching results")] : filtered;
-        }
+    if(visitIds != null){
+      var filtered = children.filter(function(element){
+        return hasKeywords(element, visitIds);
+      });
+      children = filtered.length==0 ? [建空节点("No matching results")] : filtered;
+    }
+    
     this.树.addChild(children);
     return children;
   }
@@ -184,9 +168,9 @@ var History = function(){
   function generateTree(visitId, links, visitIds){
     var node={
       visitId: visitId,
-      title:缓冲表.取网页抬头(visitId),
-      lastVisitTime:new Date(缓冲表.取访问时间(visitId)),
-      href:缓冲表.取URL(visitId)
+      title: 缓冲表.取网页抬头(visitId),
+      lastVisitTime: new Date(缓冲表.取访问时间(visitId)),
+      href: 缓冲表.取URL(visitId)
     };
     if(visitIds && (visitId in visitIds))
       node.addClass='withkeywords';
@@ -253,7 +237,7 @@ History.prototype = {
   roots:[],
   links:{},
   树:null,
-  rootsRebuild:true,//flag: when the earliest date of the matched visitItems are later than 最早回溯时间点, set this to false, meaning no need to rebuild roots
+  需重建树:true,//flag: when the earliest date of the matched visitItems are later than 最早回溯时间点, set this to false, meaning no need to rebuild roots
   
   置视图: function(树){
     this.树 = 树;
