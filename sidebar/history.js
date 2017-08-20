@@ -155,42 +155,20 @@ var History = function(){
     }
     
     var children = [];
-    var lastUrl = "";
-    var count=1;
+    //var lastUrl = "";
     /* show 'no match' */
     if(this.roots.length==0){
         return createNoneNode("No history record");
       
     }
-    var linkslen =0;
-    for(var l in this.links){
-        linkslen++;
-    }
-    var lastRoot = generateTree(this.roots[0], this.links, visitIds);
-    lastUrl=lastRoot.href;
-    if(this.roots.length==1){
-      children.push(lastRoot);
-    }else{
         //in reverse order, to make latest on top
         for(var r=this.roots.length-1;r>=0;r--){
-          //group those that have same url continuously, shown times in front
           var root = generateTree(this.roots[r], this.links, visitIds);
-          if(lastUrl==root.href){
-            count++;
-            continue;
-          }else if(root.href==null){
+          if(root.href==null){
             //ignore those with null url
             continue;
           }
-          else{
-            if(count!=1){
-              lastRoot.title="("+count+") "+lastRoot.title;
-            }
-            count=1;
-          }
-          children.push(lastRoot);
-          lastRoot = root;
-          lastUrl=root.href;
+          children.push(root);
         }
         
         if(visitIds != null){
@@ -199,7 +177,6 @@ var History = function(){
           });
           children = filtered.length==0 ? [createNoneNode("No matching results")] : filtered;
         }
-    }
     this.树.addChild(children);
     return children;
   }
