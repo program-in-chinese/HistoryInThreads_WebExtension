@@ -62,7 +62,7 @@ $(function () {
   var clearView = function(){
     树.removeChildren();
   }
-  var history = new History();
+  var history = new 浏览历史();
   history.置视图(树);
   clearView();
   history.按关键词搜索("");

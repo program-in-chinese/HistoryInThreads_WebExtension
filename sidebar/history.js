@@ -232,59 +232,68 @@ var History = function(){
 };
 
 var 浏览历史 = function(){
-  this.带关键词访问记录 = [];
-  this.无关键词访问记录 = [];
+  var 带关键词访问记录 = [];
+  var 无关键词访问记录 = [];
+  var 当前关键词 = '';
 
   this.按关键词搜索历史 = function(关键词, 回溯时间) {
+    当前关键词 = 关键词;
 
     // TODO: 如果先按关键词搜索, 如果没有匹配, 可以省去搜索所有历史
     // 首先搜索所有浏览历史
     var 无关键词搜索选项 = 生成搜索选项('', 回溯时间);
 
-    var 遍历所有历史记录 = function(历史记录) {
-      var 所有url = 取历史记录url(历史记录);
-
-      for (var i = 0; i < 所有url.length; i++ ) {
-        var 处理访问 = function(访问记录) {
-          // 保存所有访问记录
-          Array.prototype.push.apply(无关键词访问记录, 访问记录);
-
-          if (i == 所有url.length - 1) {
-            if (关键词 == '') {
-              this.生成树();
-            } else {
-              var 带关键词搜索选项 = 生成搜索选项(关键词, 回溯时间);
-              chrome.history.search(带关键词搜索选项, this.遍历历史记录);
-            }
-          }
-        };
-        chrome.history.getVisits({url: 所有url[i]}, 处理访问);
-      }
-    };
-    chrome.history.search(无关键词搜索选项, 遍历所有历史记录);
+    var 无关键词搜索 = chrome.history.search(无关键词搜索选项);
+    无关键词搜索.then(遍历无关键词历史记录);
   };
 
-  this.遍历历史记录 = function(历史记录) {
+  var 遍历无关键词历史记录 = function(历史记录) {
+    var 所有url = 取历史记录url(历史记录);
+
+    for (var i = 0; i < 所有url.length; i++ ) {
+      var 无关键词访问搜索 = chrome.history.getVisits({url: 所有url[i]});
+      无关键词访问搜索.then(处理无关键词访问);
+    }
+  }
+
+  var 处理无关键词访问 = function(访问记录) {
+    // 保存所有访问记录
+    Array.prototype.push.apply(无关键词访问记录, 访问记录);
+
+    if (i == 所有url.length - 1) {
+      if (当前关键词 == '') {
+        生成树();
+      } else {
+        var 带关键词搜索选项 = 生成搜索选项(关键词, 回溯时间);
+        var 带关键词搜索 = chrome.history.search(带关键词搜索选项);
+        带关键词搜索.then(遍历带关键词历史记录);
+      }
+    }
+  };
+
+  var 遍历带关键词历史记录 = function(历史记录) {
     var 匹配url = 取历史记录url(历史记录);
 
     for (var i = 0; i < 匹配url.length; i++ ) {
-      var 处理访问 = function(访问记录) {
-        // 保存所有带关键词访问记录
-        Array.prototype.push.apply(带关键词访问记录, 访问记录);
-
-        if (i == 匹配url.length - 1) {
-          this.生成树();
-        }
-      };
-      chrome.history.getVisits({url: 匹配url[i]}, 处理访问);
+      var 带关键词访问搜索 = chrome.history.getVisits({url: 匹配url[i]})
+      带关键词访问搜索.then(处理带关键词访问);
     }
   };
-  
-  this.生成树 = function() {
-    console.log();
-  }
 
-  function 取历史记录url(历史记录) {
+  var 处理带关键词访问 = function(访问记录) {
+    // 保存所有带关键词访问记录
+    Array.prototype.push.apply(带关键词访问记录, 访问记录);
+
+    if (i == 匹配url.length - 1) {
+      生成树();
+    }
+  };
+
+  var 生成树 = function() {
+    console.log();
+  };
+
+  var 取历史记录url = function(历史记录) {
     var 所有url = [];
     for (var i = 0; i < 历史记录.length; i++) {
       所有url.push(历史记录[i].url);
@@ -292,7 +301,7 @@ var 浏览历史 = function(){
   }
 
   // 如果回溯时间为空, 默认为当天
-  function 生成搜索选项(关键词, 回溯时间) {
+  var 生成搜索选项 = function(关键词, 回溯时间) {
     var 历史回溯时间 = 回溯时间 == null ? 取今日开始时间点() : 回溯时间;
     return {
       'text': 关键词,
@@ -302,8 +311,8 @@ var 浏览历史 = function(){
   }
 };
 
-History.prototype = {
-	constructor: History,
+浏览历史.prototype = {
+	constructor: 浏览历史,
   //save the roots if history isn't retrieved
   roots:[],
   links:{},
@@ -314,8 +323,7 @@ History.prototype = {
     this.树 = 树;
   },
 	按关键词搜索: function(关键词){
-    this.按关键词搜索历史(关键词, this);
-    //this.按关键词搜索历史(关键词);
+    this.按关键词搜索历史(关键词);
 	},
   
 }
