@@ -41,10 +41,8 @@ $(function () {
         }
         
         var html = "<a class='dynatree-title' href='"+node.data.href+"'>";
-        //for(var i=0; i<cols.length; i++){
-          html += "<span class='td'>" + node.data.title + "</span>";
-          html += "<span class='td'>" + node.data.lastVisitTime.toLocaleString() + "</span>";
-        //}
+        html += "<span class='td'>" + (node.data.title == null ?  node.data.href : node.data.title ) + "</span>";
+        html += "<span class='td'>" + node.data.lastVisitTime.toLocaleString() + "</span>";
         return html + "</a>";
       },
 
