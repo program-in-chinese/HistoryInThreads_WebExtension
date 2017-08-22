@@ -314,11 +314,37 @@ var 所有主题 = [];
 
   // TODO: 根据无关键词访问记录, 带关键词访问记录, 访问细节表, 建立树
   var 生成树 = function() {
-    var 根节点 = [];
+    var 源访问记录 = [];
+    var 子记录 = {}; // visitId -> 子访问记录[]
     for(var i = 0; i<无关键词访问记录.length; i++) {
-      根节点.push(创建节点(无关键词访问记录[i]));
+      var 访问记录 = 无关键词访问记录[i];
+      var 父访问记录ID = 访问记录.referringVisitId;
+      if (父访问记录ID != null && 父访问记录ID != -1) {
+        if (子记录[父访问记录ID] == null) {
+          子记录[父访问记录ID] = [];
+        }
+        子记录[父访问记录ID].push(访问记录);
+      } else {
+        源访问记录.push(访问记录);
+      }
     }
+
+    var 根节点 = 创建树(源访问记录, 子记录);
     所有主题.addChild(根节点.length == 0 ? [建空节点("No matching results")] : 根节点);
+  };
+
+  var 创建树 = function(访问记录数组, 子记录) {
+    var 节点数组 = [];
+    if (访问记录数组 == null) {
+      return 节点数组;
+    }
+    for (var i = 0; i< 访问记录数组.length; i++) {
+      var 节点 = 创建节点(访问记录数组[i]);
+      var 子记录数组 = 子记录[访问记录数组[i].visitId];
+      节点.children = 创建树(子记录数组, 子记录);
+      节点数组.push(节点);
+    }
+    return 节点数组;
   };
 
   var 创建节点 = function(访问记录) {
