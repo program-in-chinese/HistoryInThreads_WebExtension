@@ -245,7 +245,12 @@ var 所有主题 = [];
   var 访问细节表 = {}; // visitId -> historyItem
 
   var 按关键词搜索历史 = function(关键词, 回溯时间) {
+    带关键词访问记录 = [];
+    无关键词访问记录 = [];
     当前关键词 = 关键词;
+    历史回溯时间 = 回溯时间;
+    未处理url数 = 0;
+    访问细节表 = {};
 
     // TODO: 如果先按关键词搜索, 如果没有匹配, 可以省去搜索所有历史
     // 首先搜索所有浏览历史
@@ -261,6 +266,7 @@ var 所有主题 = [];
       var 某历史记录 = 历史记录[i];
       var 无关键词访问搜索 = browser.history.getVisits({url: 某历史记录.url});
 
+      // 需要保存(visitId->历史记录)对应表, 以便生成树时根据visitId取title和url
       var 处理无关键词访问 = function(某历史记录) {
         return function(访问记录) {
           未处理url数 --;
@@ -277,7 +283,7 @@ var 所有主题 = [];
             if (当前关键词 == '') {
               生成树();
             } else {
-              var 带关键词搜索选项 = 生成搜索选项(关键词, 回溯时间);
+              var 带关键词搜索选项 = 生成搜索选项(当前关键词, 历史回溯时间);
               var 带关键词搜索 = browser.history.search(带关键词搜索选项);
               带关键词搜索.then(遍历带关键词历史记录);
             }
@@ -330,7 +336,44 @@ var 所有主题 = [];
     }
 
     var 根节点 = 创建树(源访问记录, 子记录);
+
+    if(当前关键词 != '') {
+      var 带关键词访问记录ID = 取ID集(带关键词访问记录);
+      根节点 = 过滤(根节点, 带关键词访问记录ID);
+    }
     所有主题.addChild(根节点.length == 0 ? [建空节点("No matching results")] : 根节点);
+  };
+
+  var 取ID集 = function(带关键词访问记录) {
+    var 记录ID = new Set();
+    for (var i = 0; i< 带关键词访问记录.length; i++) {
+      记录ID.add(带关键词访问记录[i].visitId);
+    }
+    return 记录ID;
+  };
+
+  var 过滤 = function(节点列表, ID集) {
+    var 结果 = [];
+    for (var i = 0; i<节点列表.length; i++) {
+      if (包含关键词(节点列表[i], ID集)) {
+        结果.push(节点列表[i]);
+      }
+    }
+    return 结果;
+  };
+
+  var 包含关键词 = function(节点, ID集) {
+    if(ID集[节点.visitId]) {
+      节点.addClass='withkeywords';
+      return true;
+    }
+    else if(节点.children){
+      for(var i in 节点.children){
+        if(包含关键词(节点.children[i], ID集))
+          return true;
+      }
+    }
+    return false;
   };
 
   var 创建树 = function(访问记录数组, 子记录) {
