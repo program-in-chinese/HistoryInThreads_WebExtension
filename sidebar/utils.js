@@ -29,6 +29,43 @@
     return now-((60*hour+min)*60+sec)*1000+milli;
   }
 
+  var 生成树 = function(无关键词访问记录, 带关键词访问记录) {
+    var 源访问记录 = [];
+    var 子记录 = {}; // visitId -> 子访问记录[]
+    for(var i = 0; i<无关键词访问记录.length; i++) {
+      var 访问记录 = 无关键词访问记录[i];
+      var 父访问记录ID = 访问记录.referringVisitId;
+      if (父访问记录ID != null && 父访问记录ID != -1) {
+        if (子记录[父访问记录ID] == null) {
+          子记录[父访问记录ID] = [];
+        }
+        子记录[父访问记录ID].push(访问记录);
+      } else {
+        源访问记录.push(访问记录);
+      }
+    }
+
+    var 根节点 = 创建树(源访问记录, 子记录);
+
+    if(当前关键词 != '') {
+      var 带关键词访问记录ID = 取ID集(带关键词访问记录);
+      根节点 = 过滤(根节点, 带关键词访问记录ID);
+    }
+    修饰节点列表(根节点);
+    所有主题.addChild(根节点.length == 0 ? [建空节点("No matching results")] : 根节点);
+  };
+
+  var 创建节点 = function(访问记录) {
+    var 访问ID = 访问记录.visitId;
+    var 节点={
+      visitId: 访问ID,
+      title: 访问细节表[访问ID].title,
+      lastVisitTime: new Date(访问记录.visitTime),
+      href: 访问细节表[访问ID].url
+    };
+    return 节点;
+  };
+  
   var 取ID集 = function(带关键词访问记录) {
     var 记录ID = new Set();
     for (var i = 0; i< 带关键词访问记录.length; i++) {
