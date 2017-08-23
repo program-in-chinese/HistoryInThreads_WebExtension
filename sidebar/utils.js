@@ -16,9 +16,7 @@
   }
   
   function notEmptyArray(array){
-    if (array && array.length > 0)
-      return true;
-    return false;
+    return array && array.length > 0;
   }
 
   // 返回毫秒

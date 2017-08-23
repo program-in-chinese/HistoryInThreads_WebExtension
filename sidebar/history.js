@@ -341,6 +341,7 @@ var 所有主题 = [];
       var 带关键词访问记录ID = 取ID集(带关键词访问记录);
       根节点 = 过滤(根节点, 带关键词访问记录ID);
     }
+    修饰节点列表(根节点);
     所有主题.addChild(根节点.length == 0 ? [建空节点("No matching results")] : 根节点);
   };
 
@@ -367,13 +368,23 @@ var 所有主题 = [];
       节点.addClass='withkeywords';
       return true;
     }
-    else if(节点.children){
+    else if(notEmptyArray(节点.children)){
       for(var i in 节点.children){
         if(包含关键词(节点.children[i], ID集))
           return true;
       }
     }
     return false;
+  };
+
+  var 修饰节点列表 = function(节点列表) {
+    for(var i in 节点列表){
+      var 节点 = 节点列表[i];
+      if(notEmptyArray(节点.children)) {
+        节点.isFolder=true;
+        修饰节点列表(节点.children);
+      }
+    }
   };
 
   var 创建树 = function(访问记录数组, 子记录) {
