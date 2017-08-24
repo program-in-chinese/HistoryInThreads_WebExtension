@@ -65,7 +65,7 @@
     };
     return 节点;
   };
-  
+
   var 取ID集 = function(带关键词访问记录) {
     var 记录ID = new Set();
     for (var i = 0; i< 带关键词访问记录.length; i++) {
@@ -128,4 +128,35 @@
       所有url.push(历史记录[i].url);
     }
     return 所有url;
+  };
+
+  var 一天内毫秒数 = 1000 * 60 * 60 * 24;
+
+  // 如果回溯时间范围为空, 默认为当天
+  var 取历史回溯时间 = function(历史时间选择) {
+    var 时间范围 = {开始: 取今日开始时间点()};
+    if(历史时间选择 == null || 历史时间选择 == '今天'){
+      // 无需修改
+    }else if(历史时间选择 == '昨天'){
+      时间范围.结束 = 时间范围.开始;
+      时间范围.开始 = 时间范围.结束 - 一天内毫秒数;
+    }else if(历史时间选择 == '本周'){
+      时间范围.开始 = 时间范围.开始 - 一天内毫秒数 * 7;
+    }else if(历史时间选择 == '本月'){
+      var date = new Date();
+      var year = date.getFullYear();
+      var month = date.getMonth();
+      时间范围.开始 = new Date(year,month,1);
+    }else if(历史时间选择 == '今年'){
+      var year = new Date().getFullYear();
+      时间范围.开始 = new Date(year, 0, 1);
+    } else if(历史时间选择 == '所有'){
+      时间范围 = {};
+    }
+    return 时间范围;
+  };
+
+  var 在时间范围内 = function(时间点, 时间范围) {
+    return (!时间范围.开始 || 时间点 > 时间范围.开始)
+    && (!时间范围.结束 || 时间点 < 时间范围.结束)
   };
