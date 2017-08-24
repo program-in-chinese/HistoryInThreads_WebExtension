@@ -5,6 +5,10 @@ $(function () {
     clearView();
     history.按关键词搜索(关键词);
   });
+  $("#选择时间范围").on('change', function(){
+    var 历史时间范围 = $("#选择时间范围").val();
+    history.按关键词搜索(关键词, 历史时间范围);
+  });
   $("#keywords").keypress(function (e) {
         if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
             $('#submitKeywords').click();
