@@ -3,7 +3,8 @@ $(function () {
     var 关键词 = $("#keywords").val();
     //console.log(keywords);
     clearView();
-    history.按关键词搜索(关键词);
+    var 历史时间范围 = $("#选择时间范围").val();
+    history.按关键词搜索(关键词, 历史时间范围);
   });
   $("#选择时间范围").on('change', function(){
     clearView();
@@ -70,6 +71,6 @@ $(function () {
   var history = new 浏览历史();
   history.置视图(树);
   clearView();
-  history.按关键词搜索("");
+  history.按关键词搜索("", "今天");
   
 });

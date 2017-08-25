@@ -50,6 +50,7 @@
     if(当前关键词 != '') {
       var 带关键词访问记录ID = 取ID集(带关键词访问记录);
       根节点 = 过滤(根节点, 带关键词访问记录ID);
+      // TODO: 如果任何带关键词的访问记录没有被包括在根节点的树中, 
     }
     修饰节点列表(根节点);
     所有主题.addChild(根节点.length == 0 ? [建空节点("No matching results")] : 根节点);
@@ -137,21 +138,21 @@
     var 时间范围 = {开始: 取今日开始时间点()};
     if(历史时间选择 == null || 历史时间选择 == '今天'){
       // 无需修改
-    }else if(历史时间选择 == '昨天'){
+    } else if(历史时间选择 == '昨天'){
       时间范围.结束 = 时间范围.开始;
       时间范围.开始 = 时间范围.结束 - 一天内毫秒数;
-    }else if(历史时间选择 == '本周'){
+    } else if(历史时间选择 == '过去7天'){
       时间范围.开始 = 时间范围.开始 - 一天内毫秒数 * 7;
-    }else if(历史时间选择 == '本月'){
+    } else if(历史时间选择 == '本月'){
       var date = new Date();
       var year = date.getFullYear();
       var month = date.getMonth();
       时间范围.开始 = new Date(year,month,1);
-    }else if(历史时间选择 == '今年'){
+    } else if(历史时间选择 == '今年'){
       var year = new Date().getFullYear();
       时间范围.开始 = new Date(year, 0, 1);
     } else if(历史时间选择 == '所有'){
-      时间范围 = {};
+      时间范围.开始 = 0;
     }
     return 时间范围;
   };
