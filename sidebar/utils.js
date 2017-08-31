@@ -143,26 +143,32 @@
   };
 
   var 一天内毫秒数 = 1000 * 60 * 60 * 24;
+  var 时间选择_今天 = '今天';
+  var 时间选择_昨天 = '昨天';
+  var 时间选择_过去7天 = '过去7天';
+  var 时间选择_本月 = '本月';
+  var 时间选择_今年 = '今年';
+  var 时间选择_所有 = '所有';
 
   // 如果回溯时间范围为空, 默认为当天
   var 取历史回溯时间 = function(历史时间选择) {
     var 时间范围 = {开始: 取今日开始时间点()};
-    if(历史时间选择 == null || 历史时间选择 == '今天'){
+    if(历史时间选择 == null || 历史时间选择 == 时间选择_今天){
       // 无需修改
-    } else if(历史时间选择 == '昨天'){
+    } else if(历史时间选择 == 时间选择_昨天){
       时间范围.结束 = 时间范围.开始;
       时间范围.开始 = 时间范围.结束 - 一天内毫秒数;
-    } else if(历史时间选择 == '过去7天'){
+    } else if(历史时间选择 == 时间选择_过去7天){
       时间范围.开始 = 时间范围.开始 - 一天内毫秒数 * 7;
-    } else if(历史时间选择 == '本月'){
+    } else if(历史时间选择 == 时间选择_本月){
       var date = new Date();
       var year = date.getFullYear();
       var month = date.getMonth();
       时间范围.开始 = new Date(year,month,1);
-    } else if(历史时间选择 == '今年'){
+    } else if(历史时间选择 == 时间选择_今年){
       var year = new Date().getFullYear();
       时间范围.开始 = new Date(year, 0, 1);
-    } else if(历史时间选择 == '所有'){
+    } else if(历史时间选择 == 时间选择_所有){
       时间范围.开始 = 0;
     }
     return 时间范围;
@@ -172,3 +178,41 @@
     return (!时间范围.开始 || 时间点 > 时间范围.开始)
     && (!时间范围.结束 || 时间点 < 时间范围.结束)
   };
+
+  var 不需重新索引 = function(新回溯时间, 原回溯时间) { 
+    if(新回溯时间 == 原回溯时间)
+      return true;
+    else if(新回溯时间 == 时间选择_今天 && (原回溯时间 == 时间选择_过去7天 || 原回溯时间 == 时间选择_本月 || 原回溯时间 == 时间选择_今年 || 原回溯时间 == 时间选择_所有))
+      return true;
+    else if(新回溯时间 == 时间选择_昨天 && (原回溯时间 == 时间选择_过去7天 || 原回溯时间 == 时间选择_所有))
+      return true;
+    else if((新回溯时间 == 时间选择_过去7天 || 新回溯时间 == 时间选择_本月 || 新回溯时间 == 时间选择_今年) && 原回溯时间 == 时间选择_所有)
+      return true;
+    else if(新回溯时间 == 时间选择_本月 && 原回溯时间 == 时间选择_今年)
+      return true;
+    else
+      return false;
+  };
+
+    
+  pub.includePeriod = function(small, large){
+    if(small==large)
+      return true;
+    else if(small==pub.TODAY && (large==pub.LAST7DAYS || large==pub.THISMONTH || large==pub.THISYEAR || large==pub.ALL))
+      return true;
+    else if(small==pub.YESTERDAY && (large==pub.LAST7DAYS || large==pub.ALL))
+      return true;
+    else if((small==pub.LAST7DAYS || small==pub.THISMONTH || small==pub.THISYEAR) && large==pub.ALL)
+      return true;
+    else if(small==pub.THISMONTH && large==pub.THISYEAR)
+      return true;
+    else
+      return false;
+  };
+
+  // 两个回溯时间都不为空, 但结束可能为空
+  /*var 需重新索引 = function(新回溯时间, 原回溯时间) {
+    return 新回溯时间.开始 < 原回溯时间.开始
+        || (新回溯时间.结束 == null && 原回溯时间.结束 != null)
+        || 新回溯时间.结束 > 原回溯时间.结束;
+  };*/
