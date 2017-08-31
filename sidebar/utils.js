@@ -193,26 +193,3 @@
     else
       return false;
   };
-
-    
-  pub.includePeriod = function(small, large){
-    if(small==large)
-      return true;
-    else if(small==pub.TODAY && (large==pub.LAST7DAYS || large==pub.THISMONTH || large==pub.THISYEAR || large==pub.ALL))
-      return true;
-    else if(small==pub.YESTERDAY && (large==pub.LAST7DAYS || large==pub.ALL))
-      return true;
-    else if((small==pub.LAST7DAYS || small==pub.THISMONTH || small==pub.THISYEAR) && large==pub.ALL)
-      return true;
-    else if(small==pub.THISMONTH && large==pub.THISYEAR)
-      return true;
-    else
-      return false;
-  };
-
-  // 两个回溯时间都不为空, 但结束可能为空
-  /*var 需重新索引 = function(新回溯时间, 原回溯时间) {
-    return 新回溯时间.开始 < 原回溯时间.开始
-        || (新回溯时间.结束 == null && 原回溯时间.结束 != null)
-        || 新回溯时间.结束 > 原回溯时间.结束;
-  };*/
