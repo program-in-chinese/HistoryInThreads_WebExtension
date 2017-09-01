@@ -131,14 +131,6 @@
     return 节点数组;
   };
 
-  var 取历史记录url = function(历史记录) {
-    var 所有url = [];
-    for (var i = 0; i < 历史记录.length; i++) {
-      所有url.push(历史记录[i].url);
-    }
-    return 所有url;
-  };
-
   var 一天内毫秒数 = 1000 * 60 * 60 * 24;
   var 时间选择_今天 = '今天';
   var 时间选择_昨天 = '昨天';
@@ -196,3 +188,17 @@
       return {'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c];
     });
   }
+
+  var 生成搜索选项 = function(关键词, 时间范围) {
+    var 搜索选项 = {
+      'text': 关键词,
+      'maxResults': Number.MAX_SAFE_INTEGER
+    };
+    if (时间范围.开始) {
+      搜索选项.startTime = 时间范围.开始;
+    }
+    if (时间范围.结束) {
+      搜索选项.endTime = 时间范围.结束;
+    }
+    return 搜索选项;
+  };

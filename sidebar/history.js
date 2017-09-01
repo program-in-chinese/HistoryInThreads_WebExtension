@@ -96,11 +96,9 @@ var 耗时 = {};
   }
 
   var 遍历带关键词历史记录 = function(历史记录) {
-    var 匹配url = 取历史记录url(历史记录);
-
-    未处理url数 = 匹配url.length;
-    for (var i = 0; i < 匹配url.length; i++ ) {
-      var 带关键词访问搜索 = browser.history.getVisits({url: 匹配url[i]})
+    未处理url数 = 历史记录.length;
+    for (var i = 0; i < 历史记录.length; i++ ) {
+      var 带关键词访问搜索 = browser.history.getVisits({url: 历史记录[i].url})
       带关键词访问搜索.then(处理带关键词访问);
     }
   };
@@ -117,20 +115,6 @@ var 耗时 = {};
     if (未处理url数 == 0) {
       生成树(无关键词访问记录, 带关键词访问记录);
     }
-  };
-
-  var 生成搜索选项 = function(关键词, 时间范围) {
-    var 搜索选项 = {
-      'text': 关键词,
-      'maxResults': Number.MAX_SAFE_INTEGER
-    };
-    if (时间范围.开始) {
-      搜索选项.startTime = 时间范围.开始;
-    }
-    if (时间范围.结束) {
-      搜索选项.endTime = 时间范围.结束;
-    }
-    return 搜索选项;
   };
 
 浏览历史.prototype = {
