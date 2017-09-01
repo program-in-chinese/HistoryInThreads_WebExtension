@@ -63,6 +63,7 @@
       根节点 = 过滤(根节点, 带关键词访问记录ID);
     }
     修饰节点列表(根节点);
+    排序(根节点);
     所有主题.addChild(根节点.length == 0 ? [建空节点("No matching results")] : 根节点);
   };
 
@@ -118,6 +119,12 @@
         修饰节点列表(节点.children);
       }
     }
+  };
+
+  var 排序 = function(节点列表) {
+    节点列表.sort(function(节点1, 节点2){
+      return 节点2.lastVisitTime - 节点1.lastVisitTime;
+    });
   };
 
   var 创建树 = function(访问记录数组, 子记录) {
