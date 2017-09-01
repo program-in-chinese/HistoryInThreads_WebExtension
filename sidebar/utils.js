@@ -1,16 +1,4 @@
 
-  function hasKeywords(node, hasVisit){
-    if(hasVisit[node.visitId])
-      return true;
-    else if(node.children){
-      for(var i in node.children){
-        if(hasKeywords(node.children[i], hasVisit))
-          return true;
-      }
-    }
-    return false;
-  }
-
   function 建空节点(title){
     return {title:title};
   }

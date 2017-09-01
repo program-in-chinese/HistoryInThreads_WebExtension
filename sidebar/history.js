@@ -20,8 +20,6 @@ var 耗时 = {};
   var 未处理url数 = 0;
   var 访问细节表 = {}; // visitId -> historyItem
 
-  //var 需重新索引 = true;
-
   var 按关键词搜索历史 = function(关键词, 历史时间范围) {
     计时("调用前")
     带关键词访问记录 = [];
@@ -137,12 +135,6 @@ var 耗时 = {};
 
 浏览历史.prototype = {
 	constructor: 浏览历史,
-  //save the roots if history isn't retrieved
-  roots:[],
-  links:{},
-  //树:null,
-  需重建树:true,//flag: when the earliest date of the matched visitItems are later than 最早回溯时间点, set this to false, meaning no need to rebuild roots
-  
   置视图: function(树){
     所有主题 = 树;
   },
