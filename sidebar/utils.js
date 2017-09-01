@@ -200,3 +200,9 @@
     else
       return false;
   };
+
+  var 转换转义符 = function(字符串) {
+    return 字符串.replace(/[<>&"]/g, function(c){
+      return {'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c];
+    });
+  }

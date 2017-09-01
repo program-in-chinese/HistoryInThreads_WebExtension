@@ -49,7 +49,7 @@ $(function () {
         }
         
         var html = "<a class='dynatree-title' href='"+node.data.href+"'>";
-        html += "<span class='td'>" + (node.data.title == null ?  node.data.href : node.data.title ) + "</span>";
+        html += "<span class='td'>" + 转换转义符(node.data.title == null ? node.data.href : node.data.title ) + "</span>";
         html += "<span class='td'>" + node.data.lastVisitTime.toLocaleString() + "</span>";
         return html + "</a>";
       },
