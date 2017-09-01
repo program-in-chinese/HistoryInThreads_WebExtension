@@ -64,6 +64,8 @@
     }
     修饰节点列表(根节点);
     排序(根节点);
+
+    所有主题.removeChildren();
     所有主题.addChild(根节点.length == 0 ? [建空节点("No matching results")] : 根节点);
   };
 
