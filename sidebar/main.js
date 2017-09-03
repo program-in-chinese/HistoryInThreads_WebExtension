@@ -1,4 +1,13 @@
 $(function () {
+  $("#选择时间范围 option[value='今天']").text(browser.i18n.getMessage("时间范围_今天"));
+  $("#选择时间范围 option[value='昨天']").text(browser.i18n.getMessage("时间范围_昨天"));
+  $("#选择时间范围 option[value='过去7天']").text(browser.i18n.getMessage("时间范围_过去7天"));
+  $("#选择时间范围 option[value='本月']").text(browser.i18n.getMessage("时间范围_本月"));
+  $("#选择时间范围 option[value='今年']").text(browser.i18n.getMessage("时间范围_今年"));
+  $("#选择时间范围 option[value='所有']").text(browser.i18n.getMessage("时间范围_所有"));
+
+  $("#keywords").attr("placeholder", browser.i18n.getMessage("搜索栏占位"));
+
   $("#submitKeywords").on('click', function(){
     var 关键词 = $("#keywords").val();
     //console.log(keywords);

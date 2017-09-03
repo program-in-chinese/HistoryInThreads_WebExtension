@@ -82,7 +82,7 @@ var 耗时 = {};
               计时("生成树之前")
             } else {
               所有主题.removeChildren();
-              所有主题.addChild([建空节点("Searching...")]);
+              所有主题.addChild([建空节点(browser.i18n.getMessage("搜索中"))]);
 
               var 带关键词搜索选项 = 生成搜索选项(当前关键词, 历史回溯时间);
               var 带关键词搜索 = browser.history.search(带关键词搜索选项);
@@ -123,7 +123,7 @@ var 耗时 = {};
     所有主题 = 树;
   },
 	按关键词搜索: function(关键词, 历史范围选择){
-    所有主题.addChild([建空节点("Indexing...")]);
+    所有主题.addChild([建空节点(browser.i18n.getMessage("索引中"))]);
     按关键词搜索历史(关键词, 历史范围选择);
 	},
   
