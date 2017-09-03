@@ -31,12 +31,12 @@
     display: block;
 }
 .input-prepend.input-fullwidth .btn {
-    width: 70px;
+    width: 90px;
 }
 .input-prepend.input-fullwidth .input-wrapper {
     position: absolute;
     display: block;
-    left: 70px; /* 40 + 2*5 - 1 */
+    left: 90px;
     right: 0;
     top: 0;
     bottom: 0;
@@ -91,16 +91,16 @@
     <div id="search" class="input-prepend box-shadow input-fullwidth">
       <select id="选择时间范围" name="历史时间范围">
         <!-- TODO: 国际化 -->
-        <option value="今天" selected>今天</option>
-        <option value="昨天">昨天</option>
-        <option value="过去7天">过去7天</option>
-        <option value="本月">本月</option>
-        <option value="今年">今年</option>
-        <option value="所有">所有</option>
+        <option value="今天" selected>Today</option>
+        <option value="昨天">Yesterday</option>
+        <option value="过去7天">Last 7 Days</option>
+        <option value="本月">This Month</option>
+        <option value="今年">This Year</option>
+        <option value="所有">All</option>
       </select>
       <input id="submitKeywords" type="submit" value="Search" class="btn primary"></input>
       <div class="input-wrapper">
-        <input type="text" id="keywords" placeholder="Search by keyword..."/>
+        <input type="text" id="keywords" placeholder="Search History"/>
       </div>
     </div>
     <div id="demo1" class="demo">
