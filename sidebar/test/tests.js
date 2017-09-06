@@ -8,7 +8,7 @@ QUnit.test( "Set test", function( assert ) {
 });
 
 QUnit.test("访问缓冲表测试", function(assert) {
-  var 缓冲表 = new 访问缓冲表();//访问缓冲表();
+  var 缓冲表 = new 访问缓冲表();
   缓冲表.置网页抬头(1, "抬头1");
   assert.equal(缓冲表.取网页抬头(1), "抬头1");
 
@@ -17,7 +17,36 @@ QUnit.test("访问缓冲表测试", function(assert) {
   assert.deepEqual(缓冲表.所有ID(), ["2", "3"]);
 });
 
-QUnit.test("History test1", function(assert) {
-    var history = new History();
-    assert.ok(history.按关键词搜索 != null);
+QUnit.test("浏览历史接口测试", function(assert) {
+    var 历史搜索 = new 浏览历史();
+    assert.ok(历史搜索.按关键词搜索 != null);
+});
+
+QUnit.test("不需重新索引测试", function(assert) {
+  assert.notOk(不需重新索引(时间选择_昨天, 时间选择_今天));
+  assert.notOk(不需重新索引(时间选择_过去7天, 时间选择_今天));
+  assert.notOk(不需重新索引(时间选择_本月, 时间选择_今天));
+  assert.notOk(不需重新索引(时间选择_今年, 时间选择_今天));
+  assert.notOk(不需重新索引(时间选择_所有, 时间选择_今天));
+
+  assert.notOk(不需重新索引(时间选择_今天, 时间选择_昨天));
+  assert.notOk(不需重新索引(时间选择_过去7天, 时间选择_昨天));
+  assert.notOk(不需重新索引(时间选择_所有, 时间选择_昨天));
+
+  assert.notOk(不需重新索引(时间选择_所有, 时间选择_过去7天));
+  assert.notOk(不需重新索引(时间选择_所有, 时间选择_本月));
+  assert.notOk(不需重新索引(时间选择_所有, 时间选择_今年));
+
+  assert.ok(不需重新索引(时间选择_今天, 时间选择_过去7天));
+  assert.ok(不需重新索引(时间选择_昨天, 时间选择_过去7天));
+
+  assert.ok(不需重新索引(时间选择_今天, 时间选择_本月));
+
+  assert.ok(不需重新索引(时间选择_今天, 时间选择_今年));
+
+  assert.ok(不需重新索引(时间选择_今天, 时间选择_所有));
+  assert.ok(不需重新索引(时间选择_昨天, 时间选择_所有));
+  assert.ok(不需重新索引(时间选择_过去7天, 时间选择_所有));
+  assert.ok(不需重新索引(时间选择_本月, 时间选择_所有));
+  assert.ok(不需重新索引(时间选择_今年, 时间选择_所有));
 });
