@@ -50,3 +50,9 @@ QUnit.test("不需重新索引测试", function(assert) {
   assert.ok(不需重新索引(时间选择_本月, 时间选择_所有));
   assert.ok(不需重新索引(时间选择_今年, 时间选择_所有));
 });
+
+QUnit.test("转换转义符测试", function(assert) {
+    assert.equal(转换转义符("测试"), "测试");
+    assert.equal(转换转义符("<测试>"), "&lt;测试&gt;");
+    assert.equal(转换转义符('"测试&'), "&quot;测试&amp;");
+});
