@@ -56,10 +56,10 @@ $(function () {
           // Default rendering
           return false;
         }
-        
-        var html = "<a class='dynatree-title' href='"+node.data.href+"'>";
+
+        var html = "<a class='dynatree-title' href='" + node.data.href +
+                   "' title='" + node.data.lastVisitTime.toLocaleString() + "'>";
         html += "<span class='td'>" + 转换转义符(!node.data.title ? node.data.href : node.data.title ) + "</span>";
-        html += "<span class='td'>" + node.data.lastVisitTime.toLocaleString() + "</span>";
         return html + "</a>";
       },
 
