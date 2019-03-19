@@ -54,7 +54,7 @@
     排序(根节点);
 
     所有主题.removeChildren();
-    所有主题.addChild(根节点.length == 0 ? [建空节点("No matching results")] : 根节点);
+    所有主题.addChild(根节点.length == 0 ? [建空节点(browser.i18n.getMessage("无匹配"))] : 根节点);
   };
 
   var 创建节点 = function(访问记录) {

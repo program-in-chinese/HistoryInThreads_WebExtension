@@ -101,6 +101,10 @@ var 耗时 = {};
       var 带关键词访问搜索 = browser.history.getVisits({url: 历史记录[i].url})
       带关键词访问搜索.then(处理带关键词访问);
     }
+    if (未处理url数 == 0) {
+      所有主题.removeChildren();
+      所有主题.addChild([建空节点(browser.i18n.getMessage("无匹配"))]);
+    }
   };
 
   var 处理带关键词访问 = function(访问记录) {

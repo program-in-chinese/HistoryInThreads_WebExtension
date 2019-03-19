@@ -9,5 +9,6 @@
   "搜索栏占位": { "message": "Search History" },
 
   "搜索中": { "message": "Searching..." },
-  "索引中": { "message": "Indexing..." }
+  "索引中": { "message": "Indexing..." },
+  "无匹配": { "message": "No matching results" }
 }
