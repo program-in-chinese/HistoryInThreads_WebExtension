@@ -2,7 +2,7 @@
 
   "manifest_version": 2,
   "name": "History in Threads - Webextension",
-  "version": "2.3",
+  "version": "2.3.1",
   "default_locale": "zh",
 
   "description": "Display browsing history in threads.",
