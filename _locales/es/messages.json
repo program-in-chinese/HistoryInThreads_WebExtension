@@ -1,0 +1,14 @@
+{ 
+  "时间范围_今天": { "message": "Hoy" },
+  "时间范围_昨天": { "message": "Ayer" },
+  "时间范围_过去7天": { "message": "Últimos 7 días" },
+  "时间范围_本月": { "message": "Este mes" },
+  "时间范围_今年": { "message": "Este año" },
+  "时间范围_所有": { "message": "Todo" },
+
+  "搜索栏占位": { "message": "Buscar en el historial" },
+
+  "搜索中": { "message": "Buscando..." },
+  "索引中": { "message": "Indexando..." },
+  "无匹配": { "message": "No hay resultados" }
+}
